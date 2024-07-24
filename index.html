@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeuroCare AI Management System</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <div class="logo">NeuroCare</div>
+            <nav class="menu">
+                <a href="#" class="menu-item active">Dashboard</a>
+                <a href="#" class="menu-item">Patient Records</a>
+                <a href="#" class="menu-item">Appointments</a>
+                <a href="#" class="menu-item">Reports</a>
+                <a href="#" class="menu-item">Settings</a>
+                <a href="#" class="menu-item">Support</a>
+                <button class="create-account">Add Patient +</button>
+            </nav>
+        </aside>
+        <main class="main-content">
+            <header class="header">
+                <input type="search" placeholder="Search for patients">
+                <div class="user-menu">
+                    <i class="bell-icon"></i>
+                    <img src="user-avatar.png" alt="User Avatar" class="user-avatar">
+                </div>
+            </header>
+            <div class="dashboard">
+           
+                </div>
+                <div class="dashboard-stats">
+                    <!-- Small charts -->
+                    <div class="chart-item">
+                        <canvas id="totalBedsChart"></canvas>
+                        <p>Total Beds</p>
+                        <p>Occupied: 100</p>
+                    </div>
+                    <div class="chart-item">
+                        <canvas id="icuChart"></canvas>
+                        <p>ICU Total</p>
+                        <p>Occupied: 10</p>
+                    </div>
+                    <div class="chart-item">
+                        <canvas id="maleChart"></canvas>
+                        <p>Male</p>
+                        <p>Occupied: 150</p>
+                    </div>
+                    <div class="chart-item">
+                        <canvas id="femaleChart"></canvas>
+                        <p>Female</p>
+                        <p>Occupied: 120</p>
+                    </div>
+                </div>
+                <div class="dashboard-stats">
+                    <!-- Large charts -->
+                    <div class="stat-item">
+                        <canvas id="weeklyAdmissionsChart"></canvas>
+                    </div>
+                    <div class="stat-item">
+                        <canvas id="monthlyAdmissionsChart"></canvas>
+                    </div>
+                    <div class="stat-item">
+                        <canvas id="yearlyAdmissionsChart"></canvas>
+                    </div>
+                </div>
+                <div class="dashboard-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Patient Name</th>
+                                <th>Age</th>
+                                <th>Status</th>
+                                <th>Admission Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Sarj Khati</td>
+                                <td>22</td>
+                                <td><span class="status approved">Stable</span></td>
+                                <td>6/10/2020</td>
+                            </tr>
+                            <tr>
+                                <td>Aryan Chettri</td>
+                                <td>21</td>
+                                <td><span class="status approved">Stable</span></td>
+                                <td>6/10/2020</td>
+                            </tr>
+                            <tr>
+                                <td>Lakpa Norbu Sherpa</td>
+                                <td>21</td>
+                                <td><span class="status approved">Stable</span></td>
+                                <td>6/10/2020</td>
+                            </tr>
+                          
+                            <tr>
+                                <td>Rohit Sharma</td>
+                                <td>21</td>
+                                <td><span class="status expired">Deceased</span></td>
+                                <td>6/10/2020</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script>
+        // Chart.js configuration for Total Beds (Doughnut Chart)
+        var ctx1 = document.getElementById('totalBedsChart').getContext('2d');
+        var totalBedsChart = new Chart(ctx1, {
+            type: 'doughnut',
+            data: {
+                labels: ['Occupied', 'Available'],
+                datasets: [{
+                    label: 'Beds',
+                    data: [100, 200], // Total: 300
+                    backgroundColor: ['rgba(75, 192, 192, 0.6)', 'rgba(201, 203, 207, 0.6)'],
+                    borderColor: ['rgba(75, 192, 192, 1)', 'rgba(201, 203, 207, 1)'],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function (tooltipItem) {
+                                return tooltipItem.label + ': ' + tooltipItem.raw;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Chart.js configuration for ICU (Doughnut Chart)
+        var ctx2 = document.getElementById('icuChart').getContext('2d');
+        var icuChart = new Chart(ctx2, {
+            type: 'doughnut',
+            data: {
+                labels: ['Occupied', 'Available'],
+                datasets: [{
+                    label: 'ICU Beds',
+                    data: [10, 10], // Total: 20
+                    backgroundColor: ['rgba(153, 102, 255, 0.6)', 'rgba(201, 203, 207, 0.6)'],
+                    borderColor: ['rgba(153, 102, 255, 1)', 'rgba(201, 203, 207, 1)'],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function (tooltipItem) {
+                                return tooltipItem.label + ': ' + tooltipItem.raw;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Chart.js configuration for Male (Doughnut Chart)
+        var ctx3 = document.getElementById('maleChart').getContext('2d');
+        var maleChart = new Chart(ctx3, {
+            type: 'doughnut',
+            data: {
+                labels: ['Occupied', 'Available'],
+                datasets: [{
+                    label: 'Male Beds',
+                    data: [150, 150], // Total assumed to be 300
+                    backgroundColor: ['rgba(255, 159, 64, 0.6)', 'rgba(201, 203, 207, 0.6)'],
+                    borderColor: ['rgba(255, 159, 64, 1)', 'rgba(201, 203, 207, 1)'],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function (tooltipItem) {
+                                return tooltipItem.label + ': ' + tooltipItem.raw;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Chart.js configuration for Female (Doughnut Chart)
+        var ctx4 = document.getElementById('femaleChart').getContext('2d');
+        var femaleChart = new Chart(ctx4, {
+            type: 'doughnut',
+            data: {
+                labels: ['Occupied', 'Available'],
+                datasets: [{
+                    label: 'Female Beds',
+                    data: [120, 180], // Total assumed to be 300
+                    backgroundColor: ['rgba(54, 162, 235, 0.6)', 'rgba(201, 203, 207, 0.6)'],
+                    borderColor: ['rgba(54, 162, 235, 1)', 'rgba(201, 203, 207, 1)'],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function (tooltipItem) {
+                                return tooltipItem.label + ': ' + tooltipItem.raw;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Chart.js configuration for Weekly Admissions (Stacked Bar Chart)
+        var ctx5 = document.getElementById('weeklyAdmissionsChart').getContext('2d');
+        var weeklyAdmissionsChart = new Chart(ctx5, {
+            type: 'bar',
+            data: {
+                labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+                datasets: [{
+                    label: 'Admissions',
+                    data: [30, 45, 40, 50, 55],
+                    backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    x: {
+                        stacked: true
+                    },
+                    y: {
+                        stacked: true,
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Chart.js configuration for Monthly Admissions (Stacked Bar Chart)
+        var ctx6 = document.getElementById('monthlyAdmissionsChart').getContext('2d');
+        var monthlyAdmissionsChart = new Chart(ctx6, {
+            type: 'bar',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                datasets: [{
+                    label: 'Admissions',
+                    data: [200, 220, 210, 250, 270, 260],
+                    backgroundColor: 'rgba(153, 102, 255, 0.6)',
+                    borderColor: 'rgba(153, 102, 255, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    x: {
+                        stacked: true
+                    },
+                    y: {
+                        stacked: true,
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Chart.js configuration for Yearly Admissions (Line Chart)
+        var ctx7 = document.getElementById('yearlyAdmissionsChart').getContext('2d');
+        var yearlyAdmissionsChart = new Chart(ctx7, {
+            type: 'line',
+            data: {
+                labels: ['2021', '2022', '2023'],
+                datasets: [{
+                    label: 'Admissions',
+                    data: [2500, 3000, 3500],
+                    fill: false,
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    tension: 0.1
+                }]
+            },
+            options: {
+                scales: {
+                    x: {
+                        beginAtZero: true
+                    },
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
